@@ -1,0 +1,12 @@
+@model Presentation.Models.DepartmentViewModel
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<h1>@Model.Name</h1>
+<p>
+    <strong>Description:</strong> @Model.Description
+</p>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<a asp-action="Detail" asp-route-id="@Model.Id" class="btn btn-primary">Details</a>
