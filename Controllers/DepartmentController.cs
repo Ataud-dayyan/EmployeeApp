@@ -104,23 +104,21 @@ public class DepartmentController : BaseController
         return RedirectToAction("Index");
     }
 
-    public ActionResult Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        return View();
+        var department = await _departmentService.GetDepartmentByIdAsync(id);
+        if (department == null) return NotFound();
+
+        return View(department); // This shows a confirmation page
     }
 
     // POST: DepartmentController/Delete/5
-    [HttpPost]
+    [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public ActionResult Delete(int id, IFormCollection collection)
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        try
-        {
-            return RedirectToAction(nameof(Index));
-        }
-        catch
-        {
-            return View();
-        }
+        await _departmentService.DeleteDepartmentAsync(id);
+        return RedirectToAction(nameof(Index));
     }
+
 }
