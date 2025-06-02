@@ -76,23 +76,32 @@ public class DepartmentController : BaseController
         return RedirectToAction(nameof(Index));
     }
 
-    public ActionResult Edit(int id)
+
+    public async Task<IActionResult> Edit(Guid id)
     {
-        return View();
+        var department = await _departmentService.GetDepartmentByIdAsync(id);
+
+        if (department == null)
+        {
+            return NotFound();
+        }
+
+
+        return View(department);
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public ActionResult Edit(int id, IFormCollection collection)
+    public async Task<IActionResult> Edit(DepartmentDto department)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            return RedirectToAction(nameof(Index));
+            return View(department);
         }
-        catch
-        {
-            return View();
-        }
+
+        await _departmentService.UpdateDepartmentAsync(department);
+        return RedirectToAction("Index");
     }
 
     public ActionResult Delete(int id)
